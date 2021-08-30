@@ -1,9 +1,16 @@
-﻿namespace FourInARowLogic
+﻿using System;
+
+namespace FourInARowLogic
 {
+    using System;
+
     public class FourInARow
     {
         private readonly Board r_Board;
         private Player m_Player1, m_Player2, m_CurrentPlayer;
+
+        public event Action PlayerSwitch;
+
 
         public FourInARow(int i_Row, int i_Col, eGameStyle i_GameStyle, string i_FirstPlayerName, string i_SecondPlayerName)
         {
@@ -217,7 +224,19 @@
 
         private void switchPlayer()
         {
-           CurrentPlayer = CurrentPlayer == Player1 ? Player2 : Player1;
+            if (m_Player2.IsHuman())
+            {
+                OnPlayerSwitch();
+            }
+            CurrentPlayer = CurrentPlayer == Player1 ? Player2 : Player1;
+        }
+
+        private void OnPlayerSwitch()
+        {
+            if (PlayerSwitch != null)
+            {
+                PlayerSwitch.Invoke();
+            }
         }
 
         public enum eGameStyle

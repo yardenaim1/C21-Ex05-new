@@ -28,15 +28,16 @@ namespace FourInARowUI
             this.InitializeButtons();
             this.InitializeComponent();
 
-            FourInARow.eGameStyle gameStyle = r_IsPlayer2AI ? FourInARow.eGameStyle.PlayerVsComputer : FourInARow.eGameStyle.PlayerVsPlayer;
-            m_FourInARowGame = new FourInARow(r_Rows, r_Cols, gameStyle, r_Player1Name, r_Player2Name);
+            //FourInARow.eGameStyle gameStyle = r_IsPlayer2AI ? FourInARow.eGameStyle.PlayerVsComputer : FourInARow.eGameStyle.PlayerVsPlayer;
+           // m_FourInARowGame = new FourInARow(r_Rows, r_Cols, gameStyle, r_Player1Name, r_Player2Name);
         }
 
         private void GameForm_Load(object sender, EventArgs e)
         {
-            //InitializeButtons();
-            //FourInARow.eGameStyle gameStyle = r_IsPlayer2AI ? FourInARow.eGameStyle.PlayerVsComputer : FourInARow.eGameStyle.PlayerVsPlayer;
-            //m_FourInARowGame = new FourInARow(r_Rows, r_Cols, gameStyle, r_Player1Name, r_Player2Name);
+            FourInARow.eGameStyle gameStyle = r_IsPlayer2AI ? FourInARow.eGameStyle.PlayerVsComputer : FourInARow.eGameStyle.PlayerVsPlayer;
+            m_FourInARowGame = new FourInARow(r_Rows, r_Cols, gameStyle, r_Player1Name, r_Player2Name);
+
+            m_FourInARowGame.PlayerSwitch += changeBoldText;
         }
         private void InitializeComponent()
         {
@@ -142,9 +143,10 @@ namespace FourInARowUI
             Button button = sender as Button;
             int col = int.Parse(button.Text);
             if (button != null)
-            {  
-                m_FourInARowGame.MakeMove(int.Parse(button.Text), this.m_FourInARowGame.CurrentPlayer, out int o_RowInserted);
-                updateGameBoard(o_RowInserted, col, m_FourInARowGame.CurrentPlayer.Sign);
+            {
+                char currentPlayerSign = m_FourInARowGame.CurrentPlayer.Sign;
+                m_FourInARowGame.MakeMove(col, this.m_FourInARowGame.CurrentPlayer, out int o_RowInserted);
+                updateGameBoard(o_RowInserted, col, currentPlayerSign);
                 FourInARow.eStatesOfGame state = m_FourInARowGame.GetCurrentStateOfGame(o_RowInserted, col);
 
                 if (state == FourInARow.eStatesOfGame.Lose || state == FourInARow.eStatesOfGame.Draw)
@@ -155,7 +157,7 @@ namespace FourInARowUI
                 {
                     if (r_IsPlayer2AI)
                     {
-                        Thread.Sleep(1000);
+                        //Thread.Sleep(1000);
                         makeAIMove();
                     }
                 }
@@ -166,12 +168,37 @@ namespace FourInARowUI
         {
             //Thread.Sleep(1000);
             int aIColChoice = m_FourInARowGame.GetAiNextMove();
+            char currentPlayerSign = m_FourInARowGame.CurrentPlayer.Sign;
+
             m_FourInARowGame.MakeMove(aIColChoice, m_FourInARowGame.Player2, out int o_RowInserted);
             FourInARow.eStatesOfGame state = m_FourInARowGame.GetCurrentStateOfGame(o_RowInserted, aIColChoice);
-            updateGameBoard(o_RowInserted, aIColChoice, m_FourInARowGame.CurrentPlayer.Sign);
+            updateGameBoard(o_RowInserted, aIColChoice, currentPlayerSign);
             if (state == FourInARow.eStatesOfGame.Lose || state == FourInARow.eStatesOfGame.Draw)
             {
                 m_FourInARowGame.RoundOver(state, m_FourInARowGame.CurrentPlayer);
+            }
+        }
+
+        private void changeBoldText()
+        {
+            if (labelPlayer1.Font.Bold)
+            {
+                labelPlayer2.Font = new Font(labelPlayer2.Font, FontStyle.Bold);
+                labelPlayer2.ForeColor = Color.Blue;
+                labelScorePlayer2.Font = new Font(labelScorePlayer2.Font, FontStyle.Bold);
+                labelPlayer1.Font = new Font(labelPlayer1.Font, FontStyle.Regular);
+                labelScorePlayer1.Font = new Font(labelScorePlayer1.Font, FontStyle.Regular);
+                labelPlayer1.ForeColor = Color.Black;
+
+            }
+            else
+            {
+                labelPlayer1.Font = new Font(labelPlayer1.Font, FontStyle.Bold);
+                labelPlayer1.ForeColor = Color.Blue;
+                labelScorePlayer1.Font = new Font(labelScorePlayer1.Font, FontStyle.Bold);
+                labelPlayer2.Font = new Font(labelPlayer2.Font, FontStyle.Regular);
+                labelScorePlayer2.Font = new Font(labelScorePlayer2.Font, FontStyle.Regular);
+                labelPlayer2.ForeColor = Color.Black;
             }
         }
     }
