@@ -7,9 +7,13 @@ namespace FourInARowLogic
     public class FourInARow
     {
         private readonly Board r_Board;
+        private eStatesOfGame m_CurrentState = eStatesOfGame.Continue;
         private Player m_Player1, m_Player2, m_CurrentPlayer;
 
         public event Action PlayerSwitch;
+
+        public event Action GameOver;
+
 
 
         public FourInARow(int i_Row, int i_Col, eGameStyle i_GameStyle, string i_FirstPlayerName, string i_SecondPlayerName)
@@ -69,29 +73,45 @@ namespace FourInARowLogic
             }
         }
 
-        public void RoundOver(eStatesOfGame i_CurrentState, Player i_CurrentPlayer)
+        public eStatesOfGame CurrentState
         {
-            switch (i_CurrentState)
+            get
             {
-                case eStatesOfGame.Quit:
-                    {
-                        if (i_CurrentPlayer == m_Player1)
-                        {
-                            m_Player2.Score++;
-                        }
-                        else
-                        {
-                            m_Player1.Score++;
-                        }
+                return m_CurrentState;
+            }
 
-                        break;
-                    }
+            set
+            {
+                m_CurrentState = value;
+            }
+        }
 
-                case eStatesOfGame.Lose:
-                    {
-                        i_CurrentPlayer.Score++;
-                        break;
-                    }
+        public void RoundOver(Player i_CurrentPlayer)
+        {
+
+            if (m_CurrentState != eStatesOfGame.Draw)
+            {
+                if(i_CurrentPlayer == m_Player1)
+                {
+                    m_Player2.Score++;
+
+                }
+                else
+                { 
+                     m_Player1.Score++;
+                }
+            }
+
+            r_Board.ClearBoard();
+            m_CurrentPlayer = m_Player1;
+            OnGameOver();
+        }
+
+        private void OnGameOver()
+        {
+            if (GameOver != null)
+            {
+                GameOver.Invoke();
             }
         }
 
@@ -203,7 +223,7 @@ namespace FourInARowLogic
 
         public eStatesOfGame GetCurrentStateOfGame(int i_LastRowInserted, int i_LastColInserted)
         {
-            eStatesOfGame resultState = eStatesOfGame.Continue;
+            eStatesOfGame resultState = m_CurrentState;
 
             if (r_Board.IsWinnerMove(i_LastRowInserted, i_LastColInserted))
             {
@@ -213,7 +233,7 @@ namespace FourInARowLogic
             {
                 resultState = eStatesOfGame.Draw;
             }
-
+            m_CurrentState = resultState;
             return resultState;
         }
 

@@ -28,8 +28,6 @@ namespace FourInARowUI
             this.InitializeButtons();
             this.InitializeComponent();
 
-            //FourInARow.eGameStyle gameStyle = r_IsPlayer2AI ? FourInARow.eGameStyle.PlayerVsComputer : FourInARow.eGameStyle.PlayerVsPlayer;
-           // m_FourInARowGame = new FourInARow(r_Rows, r_Cols, gameStyle, r_Player1Name, r_Player2Name);
         }
 
         private void GameForm_Load(object sender, EventArgs e)
@@ -38,7 +36,9 @@ namespace FourInARowUI
             m_FourInARowGame = new FourInARow(r_Rows, r_Cols, gameStyle, r_Player1Name, r_Player2Name);
 
             m_FourInARowGame.PlayerSwitch += changeBoldText;
+            m_FourInARowGame.GameOver += FourInARow_GameOver;
         }
+
         private void InitializeComponent()
         {
             this.labelPlayer1 = new System.Windows.Forms.Label();
@@ -136,6 +136,13 @@ namespace FourInARowUI
         {
             Button buttonToUpdate = m_ButtonsOfTheGame[i_Row, i_Col - 1];
             buttonToUpdate.Text = i_PlayerSign.ToString();
+            for(int col = 0; col < r_Cols; col++)
+            {
+                if(m_ButtonsOfTheGame[1,col].Text != "")
+                {
+                    m_ButtonsOfTheGame[0, col].Enabled = false;
+                }
+            }
         }
 
         private void ColButton_OnClick(object sender, EventArgs e)
@@ -151,7 +158,7 @@ namespace FourInARowUI
 
                 if (state == FourInARow.eStatesOfGame.Lose || state == FourInARow.eStatesOfGame.Draw)
                 {
-                    m_FourInARowGame.RoundOver(state, m_FourInARowGame.CurrentPlayer);
+                    m_FourInARowGame.RoundOver(m_FourInARowGame.CurrentPlayer);
                 }
                 else
                 {
@@ -164,6 +171,73 @@ namespace FourInARowUI
             }
         }
 
+        private void FourInARow_GameOver()
+        {
+            string roundWinner = getRoundWinnerAndUpdateScore();
+            string finalWinner = getFinalWinnerName(); // In case the game does not continue - gets the player with the highest score to show as winner
+            Opacity = 0.8;
+            if (endOfRoundMessageBox(roundWinner))
+            {
+                clearGameBoardButtons();
+                m_FourInARowGame.CurrentState = FourInARow.eStatesOfGame.Continue;
+            }
+            else
+            {
+                MessageBox.Show(string.Format(
+                                       "{0}",
+                                       finalWinner != string.Empty ? string.Format("The winner is {0}", finalWinner) : "A draw between the players!"));
+                Close();
+            }
+        }
+
+        private void clearGameBoardButtons()
+        {
+            for(int row = 1; row <= r_Rows; row++)
+            {
+                for(int col = 0;col < r_Cols; col++)
+                {
+                    m_ButtonsOfTheGame[0, col].Enabled = true;
+                    m_ButtonsOfTheGame[row, col].Text = string.Empty;
+                }
+            }            
+        }
+
+        private string getRoundWinnerAndUpdateScore()
+        {
+            string winnerName = string.Empty;
+            if (m_FourInARowGame.CurrentState != FourInARow.eStatesOfGame.Draw)
+            {
+                winnerName = m_FourInARowGame.CurrentPlayer == m_FourInARowGame.Player1 ?
+                             r_Player2Name : r_Player1Name;
+                if (m_FourInARowGame.CurrentPlayer == m_FourInARowGame.Player1)
+                {
+                    labelScorePlayer2.Text = (int.Parse(labelScorePlayer2.Text) + 1).ToString();
+                }
+                else
+                {
+                    labelScorePlayer1.Text = (int.Parse(labelScorePlayer1.Text) + 1).ToString();
+                }
+            }
+
+            return winnerName;
+        }
+
+        private string getFinalWinnerName()
+        {
+            string winnerName = string.Empty;
+           
+            if (m_FourInARowGame.Player1.Score > m_FourInARowGame.Player2.Score)
+            {
+                winnerName = r_Player1Name;
+            }
+            else if(m_FourInARowGame.Player2.Score > m_FourInARowGame.Player1.Score) 
+            {
+                winnerName = r_Player2Name;
+            }
+
+            return winnerName;
+        }
+       
         private void makeAIMove()
         {
             //Thread.Sleep(1000);
@@ -175,7 +249,7 @@ namespace FourInARowUI
             updateGameBoard(o_RowInserted, aIColChoice, currentPlayerSign);
             if (state == FourInARow.eStatesOfGame.Lose || state == FourInARow.eStatesOfGame.Draw)
             {
-                m_FourInARowGame.RoundOver(state, m_FourInARowGame.CurrentPlayer);
+                m_FourInARowGame.RoundOver(m_FourInARowGame.CurrentPlayer);
             }
         }
 
@@ -200,6 +274,19 @@ namespace FourInARowUI
                 labelScorePlayer2.Font = new Font(labelScorePlayer2.Font, FontStyle.Regular);
                 labelPlayer2.ForeColor = Color.Black;
             }
+        }
+
+        private bool endOfRoundMessageBox(string i_WinnerName)
+        {
+            string drawOrWin = i_WinnerName == string.Empty ? "A draw between the two players!" :
+                                               string.Format(
+                                                      "The winner is {0}!",
+                                                       i_WinnerName);
+            string message = string.Format("{0}{1}Would you like to play another round?", drawOrWin, Environment.NewLine);
+            string title = i_WinnerName == string.Empty ? "A draw!" : "A win!";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result = MessageBox.Show(message, title, buttons);
+            return result == DialogResult.Yes;
         }
     }
 }
