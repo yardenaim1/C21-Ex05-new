@@ -37,7 +37,7 @@ namespace FourInARowUI
             m_FourInARowGame = new FourInARow(r_Rows, r_Cols, gameStyle, r_Player1Name, r_Player2Name);
             m_FourInARowGame.PlayerSwitch += changeTextBoldAndColor;
             m_FourInARowGame.GameOver += FourInARow_GameOver;
-            m_FourInARowGame.board.WinSequnceFoundAction += Board_WinSequnceFoundAction;
+            m_FourInARowGame.board.WinSequenceFoundAction += Board_WinSequnceFoundAction;
         }
 
         private void InitializeComponent()

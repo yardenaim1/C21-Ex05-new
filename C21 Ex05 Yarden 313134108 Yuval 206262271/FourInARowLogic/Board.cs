@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
 namespace FourInARowLogic
 {
     public class Board
     {
         private readonly int r_RowSize, r_ColSize;
-        private Cell[,] m_Board = null;
+        private readonly Cell[,] r_Board = null;
 
-        public event Action<List<Cell>> WinSequnceFoundAction;
+        public event Action<List<Cell>> WinSequenceFoundAction;
 
         public class Cell
         {
             private readonly int r_Row;
             private readonly int r_Col;
             private char m_Sign;
-            private bool m_isPartOfSeq = false;
+            private bool m_IsPartOfSeq = false;
 
             public Cell(int i_Row, int i_Col)
             {
@@ -58,12 +57,12 @@ namespace FourInARowLogic
             {
                 get
                 {
-                    return m_isPartOfSeq;
+                    return m_IsPartOfSeq;
                 }
 
                 set
                 {
-                    m_isPartOfSeq = value;
+                    m_IsPartOfSeq = value;
                 }
             }
         }
@@ -72,9 +71,8 @@ namespace FourInARowLogic
         {
             r_ColSize = i_Cols;
             r_RowSize = i_Rows;
-            // $G$ DSN-001 (-5) Coins should be represented by either a struct, a class or an enum.
 
-            m_Board = new Cell[i_Rows, i_Cols];
+            r_Board = new Cell[i_Rows, i_Cols];
             initBoard();
         }
 
@@ -105,14 +103,14 @@ namespace FourInARowLogic
             {
                 for (int j = 0; j < r_ColSize; j++)
                 {
-                    m_Board[i, j] = new Cell(i, j);
+                    r_Board[i, j] = new Cell(i, j);
                 }
             }
         }
 
         public void ClearBoard()
         {
-            foreach(Cell cell in m_Board)
+            foreach(Cell cell in r_Board)
             {
                 cell.Sign = ' ';
                 cell.IsPartOfSeq = false;
@@ -121,7 +119,7 @@ namespace FourInARowLogic
 
         public char GetValueInCell(int i_Row, int i_Col)
         {
-            return m_Board[i_Row, i_Col].Sign;
+            return r_Board[i_Row, i_Col].Sign;
         }
 
         public void AddMove(int i_Col, char i_Sign, out int o_Row)
@@ -131,7 +129,7 @@ namespace FourInARowLogic
 
             while (row > 0 && !setDone)
             {
-                if (m_Board[row - 1, i_Col - 1].Sign != ' ')
+                if (r_Board[row - 1, i_Col - 1].Sign != ' ')
                 {
                     row--;
                 }
@@ -147,7 +145,7 @@ namespace FourInARowLogic
 
         public void SetCell(int i_Row, int i_Col, char i_Sign)
         {
-            this.m_Board[i_Row, i_Col].Sign = i_Sign;
+            this.r_Board[i_Row, i_Col].Sign = i_Sign;
         }
 
         public bool IsDraw()
@@ -158,7 +156,7 @@ namespace FourInARowLogic
             {
                 for (int j = 0; j < r_ColSize && isDraw; j++)
                 {
-                    if (this.m_Board[i, j].Sign == ' ')
+                    if (this.r_Board[i, j].Sign == ' ')
                     {
                         isDraw = false;
                     }
@@ -177,34 +175,34 @@ namespace FourInARowLogic
 
         private bool isPartOf4InRow(int i_Row, int i_Col)
         {
-            char lastSign = m_Board[i_Row - 1, i_Col - 1].Sign;
+            char lastSign = r_Board[i_Row - 1, i_Col - 1].Sign;
             int countSameSign = 1;
             
-            m_Board[i_Row - 1, i_Col - 1].IsPartOfSeq = true;
+            r_Board[i_Row - 1, i_Col - 1].IsPartOfSeq = true;
             for (int i = i_Col - 1; i > 0; i--)
             {
-                if (m_Board[i_Row - 1, i - 1].Sign != lastSign)
+                if (r_Board[i_Row - 1, i - 1].Sign != lastSign)
                 {
                     break;
                 }
-                m_Board[i_Row - 1, i - 1].IsPartOfSeq = true;
+                r_Board[i_Row - 1, i - 1].IsPartOfSeq = true;
                 countSameSign++;
             }
 
             for (int i = i_Col + 1; i <= r_ColSize; i++)
             {
-                if (m_Board[i_Row - 1, i - 1].Sign != lastSign)
+                if (r_Board[i_Row - 1, i - 1].Sign != lastSign)
                 {
                     break;
                 }
                 
-                m_Board[i_Row - 1, i - 1].IsPartOfSeq = true;
+                r_Board[i_Row - 1, i - 1].IsPartOfSeq = true;
                 countSameSign++;
             }
 
             if (countSameSign < 4)
             {
-                foreach (Cell cell in m_Board)
+                foreach (Cell cell in r_Board)
                 {
                     cell.IsPartOfSeq = false;
                 }
@@ -215,35 +213,35 @@ namespace FourInARowLogic
 
         private bool isPartOf4InCol(int i_Row, int i_Col)
         {
-            char lastSign = m_Board[i_Row - 1, i_Col - 1].Sign;
+            char lastSign = r_Board[i_Row - 1, i_Col - 1].Sign;
             int countSameSign = 1;
 
-            m_Board[i_Row - 1, i_Col - 1].IsPartOfSeq = true;
+            r_Board[i_Row - 1, i_Col - 1].IsPartOfSeq = true;
             for (int i = i_Row - 1; i > 0; i--)
             {
-                if (this.m_Board[i - 1, i_Col - 1].Sign != lastSign)
+                if (this.r_Board[i - 1, i_Col - 1].Sign != lastSign)
                 {
                     break;
                 }
 
-                m_Board[i - 1, i_Col - 1].IsPartOfSeq = true;
+                r_Board[i - 1, i_Col - 1].IsPartOfSeq = true;
                 countSameSign++;
             }
 
             for (int i = i_Row + 1; i <= r_RowSize; i++)
             {
-                if (this.m_Board[i - 1, i_Col - 1].Sign != lastSign)
+                if (this.r_Board[i - 1, i_Col - 1].Sign != lastSign)
                 {
                     break;
                 }
 
-                m_Board[i - 1, i_Col - 1].IsPartOfSeq = true;
+                r_Board[i - 1, i_Col - 1].IsPartOfSeq = true;
                 countSameSign++;
             }
 
             if (countSameSign < 4)
             {
-                foreach (Cell cell in m_Board)
+                foreach (Cell cell in r_Board)
                 {
                     cell.IsPartOfSeq = false;
                 }
@@ -254,35 +252,35 @@ namespace FourInARowLogic
 
         private bool isPartOf4InRightDiagonal(int i_Row, int i_Col)
         {
-            char lastSign = m_Board[i_Row - 1, i_Col - 1].Sign;
+            char lastSign = r_Board[i_Row - 1, i_Col - 1].Sign;
             int countSameSign = 1;
 
-            m_Board[i_Row - 1, i_Col - 1].IsPartOfSeq = true;
+            r_Board[i_Row - 1, i_Col - 1].IsPartOfSeq = true;
             for (int i = i_Row - 1, j = i_Col + 1; i > 0 && j <= r_ColSize; i--, j++)
             {
-                if (m_Board[i - 1, j - 1].Sign != lastSign)
+                if (r_Board[i - 1, j - 1].Sign != lastSign)
                 {
                     break;
                 }
 
-                m_Board[i - 1, j - 1].IsPartOfSeq = true;
+                r_Board[i - 1, j - 1].IsPartOfSeq = true;
                 countSameSign++;
             }
 
             for (int i = i_Row + 1, j = i_Col - 1; i <= r_RowSize && j > 0; i++, j--)
             {
-                if (m_Board[i - 1, j - 1].Sign != lastSign)
+                if (r_Board[i - 1, j - 1].Sign != lastSign)
                 {
                     break;
                 }
 
-                m_Board[i - 1, j - 1].IsPartOfSeq = true;
+                r_Board[i - 1, j - 1].IsPartOfSeq = true;
                 countSameSign++;
             }
 
             if (countSameSign < 4)
             {
-                foreach (Cell cell in m_Board)
+                foreach (Cell cell in r_Board)
                 {
                     cell.IsPartOfSeq = false;
                 }
@@ -293,35 +291,35 @@ namespace FourInARowLogic
 
         private bool isPartOf4InLeftDiagonal(int i_Row, int i_Col)
         {
-            char lastSign = this.m_Board[i_Row - 1, i_Col - 1].Sign;
+            char lastSign = this.r_Board[i_Row - 1, i_Col - 1].Sign;
             int countSameSign = 1;
 
-            m_Board[i_Row - 1, i_Col - 1].IsPartOfSeq = true;
+            r_Board[i_Row - 1, i_Col - 1].IsPartOfSeq = true;
             for (int i = i_Row - 1, j = i_Col - 1; i > 0 && j > 0; i--, j--)
             {
-                if (m_Board[i - 1, j - 1].Sign != lastSign)
+                if (r_Board[i - 1, j - 1].Sign != lastSign)
                 {
                     break;
                 }
 
-                m_Board[i - 1, j - 1].IsPartOfSeq = true;
+                r_Board[i - 1, j - 1].IsPartOfSeq = true;
                 countSameSign++;
             }
 
             for (int i = i_Row + 1, j = i_Col + 1; i <= r_RowSize && j <= r_ColSize; i++, j++)
             {
-                if (m_Board[i - 1, j - 1].Sign != lastSign)
+                if (r_Board[i - 1, j - 1].Sign != lastSign)
                 {
                     break;
                 }
 
-                m_Board[i - 1, j - 1].IsPartOfSeq = true;
+                r_Board[i - 1, j - 1].IsPartOfSeq = true;
                 countSameSign++;
             }
 
             if(countSameSign < 4)
             {
-                foreach(Cell cell in m_Board)
+                foreach(Cell cell in r_Board)
                 {
                     cell.IsPartOfSeq = false;
                 }
@@ -330,24 +328,25 @@ namespace FourInARowLogic
             return countSameSign >= 4;
         }
 
-        public void WinSequnceFound()
+        public void WinSequenceFound()
         {
-            OnWinSequnceFound();
+            OnWinSequenceFound();
         }
 
-        private void OnWinSequnceFound()
+        private void OnWinSequenceFound()
         {
             List<Cell> winSeq = new List<Cell>();
-            foreach(Cell cell in m_Board)
+            foreach(Cell cell in r_Board)
             {
                 if (cell.IsPartOfSeq)
                 {
                     winSeq.Add(cell);
                 }
             }
-            if(WinSequnceFoundAction != null)
+
+            if(WinSequenceFoundAction != null)
             {
-                WinSequnceFoundAction.Invoke(winSeq);
+                WinSequenceFoundAction.Invoke(winSeq);
             }
         }
 
@@ -372,8 +371,8 @@ namespace FourInARowLogic
                 {
                     char[] seq = new char[4]
                                      {
-                                         this.m_Board[i, j].Sign, this.m_Board[i, j + 1].Sign, this.m_Board[i, j + 2].Sign,
-                                         this.m_Board[i, j + 3].Sign
+                                         this.r_Board[i, j].Sign, this.r_Board[i, j + 1].Sign, this.r_Board[i, j + 2].Sign,
+                                         this.r_Board[i, j + 3].Sign
                                      };
                     score += getSequenceScore(seq);
                 }
@@ -391,8 +390,8 @@ namespace FourInARowLogic
                 {
                     char[] seq = new char[4]
                                      {
-                                         this.m_Board[j, i].Sign, this.m_Board[j + 1, i].Sign, this.m_Board[j + 2, i].Sign,
-                                         this.m_Board[j + 3, i].Sign
+                                         this.r_Board[j, i].Sign, this.r_Board[j + 1, i].Sign, this.r_Board[j + 2, i].Sign,
+                                         this.r_Board[j + 3, i].Sign
                                      };
                     score += getSequenceScore(seq);
                 }
@@ -410,8 +409,8 @@ namespace FourInARowLogic
                 {
                     char[] seq = new char[4]
                                      {
-                                         this.m_Board[i, j].Sign, this.m_Board[i + 1, j + 1].Sign, this.m_Board[i + 2, j + 2].Sign,
-                                         this.m_Board[i + 3, j + 3].Sign
+                                         this.r_Board[i, j].Sign, this.r_Board[i + 1, j + 1].Sign, this.r_Board[i + 2, j + 2].Sign,
+                                         this.r_Board[i + 3, j + 3].Sign
                                      };
                     score += getSequenceScore(seq);
                 }
@@ -429,8 +428,8 @@ namespace FourInARowLogic
                 {
                     char[] seq = new char[4]
                                      {
-                                         this.m_Board[j, i].Sign, this.m_Board[j + 1, i - 1].Sign, this.m_Board[j + 2, i - 2].Sign,
-                                         this.m_Board[j + 3, i - 3].Sign
+                                         this.r_Board[j, i].Sign, this.r_Board[j + 1, i - 1].Sign, this.r_Board[j + 2, i - 2].Sign,
+                                         this.r_Board[j + 3, i - 3].Sign
                                      };
                     score += getSequenceScore(seq);
                 }
@@ -484,7 +483,7 @@ namespace FourInARowLogic
 
         public bool IsValidCol(int i_Col)
         {
-            return i_Col >= 1 && i_Col <= this.r_ColSize && m_Board[0, i_Col - 1].Sign == ' ';
+            return i_Col >= 1 && i_Col <= this.r_ColSize && r_Board[0, i_Col - 1].Sign == ' ';
         }
     }
 }

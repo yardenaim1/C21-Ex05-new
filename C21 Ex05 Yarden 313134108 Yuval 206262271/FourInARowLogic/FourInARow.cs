@@ -200,7 +200,7 @@ namespace FourInARowLogic
                         i_GameBoard.AddMove(col, 'O', out int o_Row);
                         int score = this.miniMax(i_GameBoard, i_Depth - 1, false, col, o_Row);
                         i_GameBoard.SetCell(o_Row - 1, col - 1, ' ');
-                        bestScore = System.Math.Max(bestScore, score);
+                        bestScore = Math.Max(bestScore, score);
                     }
                 }
                 else
@@ -216,7 +216,7 @@ namespace FourInARowLogic
                         i_GameBoard.AddMove(col, 'X', out int o_Row);
                         int score = this.miniMax(i_GameBoard, i_Depth - 1, true, col, o_Row);
                         i_GameBoard.SetCell(o_Row - 1, col - 1, ' ');
-                        bestScore = System.Math.Min(bestScore, score);
+                        bestScore = Math.Min(bestScore, score);
                     }
                 }
             }
@@ -236,13 +236,14 @@ namespace FourInARowLogic
 
             if (r_Board.IsWinnerMove(i_LastRowInserted, i_LastColInserted))
             {
-                r_Board.WinSequnceFound();
+                r_Board.WinSequenceFound();
                 resultState = eStatesOfGame.Lose;
             }
             else if (r_Board.IsDraw())
             {
                 resultState = eStatesOfGame.Draw;
             }
+
             m_CurrentState = resultState;
             return resultState;
         }
@@ -258,6 +259,7 @@ namespace FourInARowLogic
             {
                 OnPlayerSwitch();
             }
+
             CurrentPlayer = CurrentPlayer == Player1 ? Player2 : Player1;
         }
 
