@@ -236,6 +236,7 @@ namespace FourInARowLogic
 
             if (r_Board.IsWinnerMove(i_LastRowInserted, i_LastColInserted))
             {
+                r_Board.WinSequnceFound();
                 resultState = eStatesOfGame.Lose;
             }
             else if (r_Board.IsDraw())

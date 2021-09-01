@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Drawing;
 using FourInARowLogic;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace FourInARowUI
@@ -36,6 +37,7 @@ namespace FourInARowUI
             m_FourInARowGame = new FourInARow(r_Rows, r_Cols, gameStyle, r_Player1Name, r_Player2Name);
             m_FourInARowGame.PlayerSwitch += changeTextBoldAndColor;
             m_FourInARowGame.GameOver += FourInARow_GameOver;
+            m_FourInARowGame.board.WinSequnceFoundAction += Board_WinSequnceFoundAction;
         }
 
         private void InitializeComponent()
@@ -120,11 +122,14 @@ namespace FourInARowUI
                         m_ButtonsOfTheGame[row, col].Size = new Size(60, 35);
                         m_ButtonsOfTheGame[row, col].Text = (col + 1).ToString();
                         m_ButtonsOfTheGame[row, col].Click += new EventHandler(ColButton_OnClick);
+                        m_ButtonsOfTheGame[row, col].BackColor = Color.Red;
+
                     }
                     else
                     {
                         m_ButtonsOfTheGame[row, col].Size = new Size(60, 45);
                         m_ButtonsOfTheGame[row, col].Enabled = false;
+                        m_ButtonsOfTheGame[row, col].BackColor = Color.Gray;
                     }
 
                     m_ButtonsOfTheGame[row, col].Location = new Point((60 * col) + 10, (60 * row) + 30);
@@ -196,6 +201,14 @@ namespace FourInARowUI
             }
         }
 
+        private void Board_WinSequnceFoundAction(List<Board.Cell> i_WinSeq)
+        {
+            foreach(Board.Cell boardCell in i_WinSeq)
+            {
+                m_ButtonsOfTheGame[boardCell.Row + 1, boardCell.Col].BackColor = Color.Green;
+            }
+        }
+
         private void clearGameBoardButtons()
         {
             for(int row = 1; row <= r_Rows; row++)
@@ -204,6 +217,7 @@ namespace FourInARowUI
                 {
                     m_ButtonsOfTheGame[0, col].Enabled = true;
                     m_ButtonsOfTheGame[row, col].Text = string.Empty;
+                    m_ButtonsOfTheGame[row, col].BackColor = Color.Gray;
                 }
             }            
         }
