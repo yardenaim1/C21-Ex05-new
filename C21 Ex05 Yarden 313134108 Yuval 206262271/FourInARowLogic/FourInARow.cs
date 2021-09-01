@@ -124,7 +124,7 @@ namespace FourInARowLogic
             }
         }
 
-        public bool IsValidInput(int i_ColumnFromUser)
+        private bool IsValidInput(int i_ColumnFromUser)
         {
             return r_Board.IsValidCol(i_ColumnFromUser);
         }
@@ -149,7 +149,7 @@ namespace FourInARowLogic
                     break;
                 }
 
-                int score = this.miniMax(this.r_Board, 5, false, col, o_Row);
+                int score = this.miniMax(this.r_Board, 4, false, col, o_Row);
                 this.r_Board.SetCell(o_Row - 1, col - 1, ' ');
                 if (score <= bestScore)
                 {
@@ -230,7 +230,7 @@ namespace FourInARowLogic
             this.switchPlayer();
         }
 
-        public eStatesOfGame GetCurrentStateOfGame(int i_LastRowInserted, int i_LastColInserted)
+        public void UpdateCurrentState(int i_LastRowInserted, int i_LastColInserted)
         {
             eStatesOfGame resultState = m_CurrentState;
 
@@ -245,12 +245,6 @@ namespace FourInARowLogic
             }
 
             m_CurrentState = resultState;
-            return resultState;
-        }
-
-        public void ResetBoard()
-        {
-            this.r_Board.ClearBoard();
         }
 
         private void switchPlayer()
