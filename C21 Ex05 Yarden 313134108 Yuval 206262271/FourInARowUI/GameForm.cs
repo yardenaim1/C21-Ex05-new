@@ -11,10 +11,10 @@ namespace FourInARowUI
         private readonly string r_Player1Name, r_Player2Name;
         private readonly bool r_IsPlayer2AI;
         private readonly int r_Rows, r_Cols;
-        private Label labelPlayer1;
-        private Label labelPlayer2;
-        private Label labelScorePlayer1;
-        private Label labelScorePlayer2;
+        private Label m_LabelPlayer1;
+        private Label m_LabelPlayer2;
+        private Label m_LabelScorePlayer1;
+        private Label m_LabelScorePlayer2;
         private Button[,] m_ButtonsOfTheGame = null;
         private FourInARow m_FourInARowGame = null;
 
@@ -27,70 +27,71 @@ namespace FourInARowUI
             this.r_IsPlayer2AI = i_IsAI;
             this.InitializeButtons();
             this.InitializeComponent();
-
         }
 
         private void GameForm_Load(object sender, EventArgs e)
         {
             FourInARow.eGameStyle gameStyle = r_IsPlayer2AI ? FourInARow.eGameStyle.PlayerVsComputer : FourInARow.eGameStyle.PlayerVsPlayer;
+           
             m_FourInARowGame = new FourInARow(r_Rows, r_Cols, gameStyle, r_Player1Name, r_Player2Name);
-
-            m_FourInARowGame.PlayerSwitch += changeBoldText;
+            m_FourInARowGame.PlayerSwitch += changeTextBoldAndColor;
             m_FourInARowGame.GameOver += FourInARow_GameOver;
         }
 
         private void InitializeComponent()
         {
-            this.labelPlayer1 = new System.Windows.Forms.Label();
-            this.labelPlayer2 = new System.Windows.Forms.Label();
-            this.labelScorePlayer1 = new System.Windows.Forms.Label();
-            this.labelScorePlayer2 = new System.Windows.Forms.Label();
+            this.m_LabelPlayer1 = new System.Windows.Forms.Label();
+            this.m_LabelPlayer2 = new System.Windows.Forms.Label();
+            this.m_LabelScorePlayer1 = new System.Windows.Forms.Label();
+            this.m_LabelScorePlayer2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // labelPlayer1
+            // m_LabelPlayer1
             // 
-            this.labelPlayer1.AutoSize = true;
-            this.labelPlayer1.Top = m_ButtonsOfTheGame[r_Rows, 0].Bottom + 10;
-            this.labelPlayer1.Left = m_ButtonsOfTheGame[r_Rows, 0].Left;
-            this.labelPlayer1.Name = "labelPlayer1";
-            this.labelPlayer1.TabIndex = 0;
-            this.labelPlayer1.Text = r_Player1Name + ": ";
+            this.m_LabelPlayer1.AutoSize = true;
+            this.m_LabelPlayer1.Top = m_ButtonsOfTheGame[r_Rows, 0].Bottom + 10;
+            this.m_LabelPlayer1.Left = m_ButtonsOfTheGame[r_Rows, 0].Left;
+            this.m_LabelPlayer1.Name = "m_LabelPlayer1";
+            this.m_LabelPlayer1.TabIndex = 0;
+            this.m_LabelPlayer1.Text = r_Player1Name + ": ";
+            this.m_LabelPlayer1.ForeColor = Color.Blue;
+
             // 
-            // labelScorePlayer1
+            // m_LabelScorePlayer1
             // 
-            // this.labelScorePlayer1.AutoSize = true;
-            this.labelScorePlayer1.Left = labelPlayer1.Left + labelPlayer1.Width;
-            this.labelScorePlayer1.Top = labelPlayer1.Top;
-            this.labelScorePlayer1.Name = "labelScorePlayer1";
-            this.labelScorePlayer1.Size = new Size(21, 24);
-            this.labelScorePlayer1.TabIndex = 2;
-            this.labelScorePlayer1.Text = "0";
+            // this.m_LabelScorePlayer1.AutoSize = true;
+            this.m_LabelScorePlayer1.Left = m_LabelPlayer1.Left + m_LabelPlayer1.Width;
+            this.m_LabelScorePlayer1.Top = m_LabelPlayer1.Top;
+            this.m_LabelScorePlayer1.Name = "m_LabelScorePlayer1";
+            this.m_LabelScorePlayer1.Size = new Size(21, 24);
+            this.m_LabelScorePlayer1.TabIndex = 2;
+            this.m_LabelScorePlayer1.Text = "0";
             // 
-            // labelPlayer2
+            // m_LabelPlayer2
             // 
-            this.labelPlayer2.AutoSize = true;
-            this.labelPlayer2.Top = this.labelPlayer1.Top;
-            this.labelPlayer2.Left = labelScorePlayer1.Left + 40;
-            this.labelPlayer2.Name = "labelPlayer2";
-            this.labelPlayer2.TabIndex = 1;
-            this.labelPlayer2.Text = r_Player2Name + ": ";
+            this.m_LabelPlayer2.AutoSize = true;
+            this.m_LabelPlayer2.Top = this.m_LabelPlayer1.Top;
+            this.m_LabelPlayer2.Left = m_LabelScorePlayer1.Left + 40;
+            this.m_LabelPlayer2.Name = "m_LabelPlayer2";
+            this.m_LabelPlayer2.TabIndex = 1;
+            this.m_LabelPlayer2.Text = r_Player2Name + ": ";
             // 
-            // labelScorePlayer2
+            // m_LabelScorePlayer2
             // 
-            this.labelScorePlayer2.Left = labelPlayer2.Left + labelPlayer2.Width;
-            this.labelScorePlayer2.Top = labelPlayer2.Top;
-            this.labelScorePlayer2.Name = "labelScorePlayer2";
-            this.labelScorePlayer2.Size = new System.Drawing.Size(21, 24);
-            this.labelScorePlayer2.TabIndex = 3;
-            this.labelScorePlayer2.Text = "0";
+            this.m_LabelScorePlayer2.Left = m_LabelPlayer2.Left + m_LabelPlayer2.Width;
+            this.m_LabelScorePlayer2.Top = m_LabelPlayer2.Top;
+            this.m_LabelScorePlayer2.Name = "m_LabelScorePlayer2";
+            this.m_LabelScorePlayer2.Size = new System.Drawing.Size(21, 24);
+            this.m_LabelScorePlayer2.TabIndex = 3;
+            this.m_LabelScorePlayer2.Text = "0";
             // 
             // GameForm
             // 
             // this.ClientSize = new System.Drawing.Size(278, 244);
-            this.Controls.Add(this.labelScorePlayer2);
-            this.Controls.Add(this.labelScorePlayer1);
-            this.Controls.Add(this.labelPlayer2);
-            this.Controls.Add(this.labelPlayer1);
+            this.Controls.Add(this.m_LabelScorePlayer2);
+            this.Controls.Add(this.m_LabelScorePlayer1);
+            this.Controls.Add(this.m_LabelPlayer2);
+            this.Controls.Add(this.m_LabelPlayer1);
             this.ClientSize = new Size(r_Cols * 60 + 20, (r_Rows + 1) * 60 + 50);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.Name = "GameForm";
@@ -135,6 +136,7 @@ namespace FourInARowUI
         private void updateGameBoard(int i_Row, int i_Col, char i_PlayerSign)
         {
             Button buttonToUpdate = m_ButtonsOfTheGame[i_Row, i_Col - 1];
+
             buttonToUpdate.Text = i_PlayerSign.ToString();
             for(int col = 0; col < r_Cols; col++)
             {
@@ -149,6 +151,7 @@ namespace FourInARowUI
         {
             Button button = sender as Button;
             int col = int.Parse(button.Text);
+
             if (button != null)
             {
                 char currentPlayerSign = m_FourInARowGame.CurrentPlayer.Sign;
@@ -164,7 +167,6 @@ namespace FourInARowUI
                 {
                     if (r_IsPlayer2AI)
                     {
-                        //Thread.Sleep(1000);
                         makeAIMove();
                     }
                 }
@@ -175,11 +177,15 @@ namespace FourInARowUI
         {
             string roundWinner = getRoundWinnerAndUpdateScore();
             string finalWinner = getFinalWinnerName(); // In case the game does not continue - gets the player with the highest score to show as winner
+            
             Opacity = 0.8;
             if (endOfRoundMessageBox(roundWinner))
             {
                 clearGameBoardButtons();
                 m_FourInARowGame.CurrentState = FourInARow.eStatesOfGame.Continue;
+                Opacity = 1;
+                m_LabelPlayer1.ForeColor = Color.Blue;
+                m_LabelPlayer2.ForeColor = Color.Black;
             }
             else
             {
@@ -205,17 +211,17 @@ namespace FourInARowUI
         private string getRoundWinnerAndUpdateScore()
         {
             string winnerName = string.Empty;
+
             if (m_FourInARowGame.CurrentState != FourInARow.eStatesOfGame.Draw)
             {
-                winnerName = m_FourInARowGame.CurrentPlayer == m_FourInARowGame.Player1 ?
-                             r_Player2Name : r_Player1Name;
-                if (m_FourInARowGame.CurrentPlayer == m_FourInARowGame.Player1)
+                winnerName = m_FourInARowGame.LastWinner.Name;
+                if (m_FourInARowGame.LastWinner == m_FourInARowGame.Player1)
                 {
-                    labelScorePlayer2.Text = (int.Parse(labelScorePlayer2.Text) + 1).ToString();
+                    m_LabelScorePlayer1.Text = (int.Parse(m_LabelScorePlayer1.Text) + 1).ToString();
                 }
                 else
                 {
-                    labelScorePlayer1.Text = (int.Parse(labelScorePlayer1.Text) + 1).ToString();
+                    m_LabelScorePlayer2.Text = (int.Parse(m_LabelScorePlayer2.Text) + 1).ToString();
                 }
             }
 
@@ -240,7 +246,6 @@ namespace FourInARowUI
        
         private void makeAIMove()
         {
-            //Thread.Sleep(1000);
             int aIColChoice = m_FourInARowGame.GetAiNextMove();
             char currentPlayerSign = m_FourInARowGame.CurrentPlayer.Sign;
 
@@ -253,26 +258,25 @@ namespace FourInARowUI
             }
         }
 
-        private void changeBoldText()
+        private void changeTextBoldAndColor()
         {
-            if (labelPlayer1.Font.Bold)
+            if (m_LabelPlayer1.Font.Bold)
             {
-                labelPlayer2.Font = new Font(labelPlayer2.Font, FontStyle.Bold);
-                labelPlayer2.ForeColor = Color.Blue;
-                labelScorePlayer2.Font = new Font(labelScorePlayer2.Font, FontStyle.Bold);
-                labelPlayer1.Font = new Font(labelPlayer1.Font, FontStyle.Regular);
-                labelScorePlayer1.Font = new Font(labelScorePlayer1.Font, FontStyle.Regular);
-                labelPlayer1.ForeColor = Color.Black;
-
+                m_LabelPlayer2.Font = new Font(m_LabelPlayer2.Font, FontStyle.Bold);
+                m_LabelPlayer2.ForeColor = Color.Blue;
+                m_LabelScorePlayer2.Font = new Font(m_LabelScorePlayer2.Font, FontStyle.Bold);
+                m_LabelPlayer1.Font = new Font(m_LabelPlayer1.Font, FontStyle.Regular);
+                m_LabelScorePlayer1.Font = new Font(m_LabelScorePlayer1.Font, FontStyle.Regular);
+                m_LabelPlayer1.ForeColor = Color.Black;
             }
             else
             {
-                labelPlayer1.Font = new Font(labelPlayer1.Font, FontStyle.Bold);
-                labelPlayer1.ForeColor = Color.Blue;
-                labelScorePlayer1.Font = new Font(labelScorePlayer1.Font, FontStyle.Bold);
-                labelPlayer2.Font = new Font(labelPlayer2.Font, FontStyle.Regular);
-                labelScorePlayer2.Font = new Font(labelScorePlayer2.Font, FontStyle.Regular);
-                labelPlayer2.ForeColor = Color.Black;
+                m_LabelPlayer1.Font = new Font(m_LabelPlayer1.Font, FontStyle.Bold);
+                m_LabelPlayer1.ForeColor = Color.Blue;
+                m_LabelScorePlayer1.Font = new Font(m_LabelScorePlayer1.Font, FontStyle.Bold);
+                m_LabelPlayer2.Font = new Font(m_LabelPlayer2.Font, FontStyle.Regular);
+                m_LabelScorePlayer2.Font = new Font(m_LabelScorePlayer2.Font, FontStyle.Regular);
+                m_LabelPlayer2.ForeColor = Color.Black;
             }
         }
 

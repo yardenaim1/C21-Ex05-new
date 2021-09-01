@@ -2,19 +2,15 @@
 
 namespace FourInARowLogic
 {
-    using System;
-
     public class FourInARow
     {
         private readonly Board r_Board;
         private eStatesOfGame m_CurrentState = eStatesOfGame.Continue;
-        private Player m_Player1, m_Player2, m_CurrentPlayer;
+        private Player m_Player1, m_Player2, m_CurrentPlayer, m_LastWinner;
 
         public event Action PlayerSwitch;
 
         public event Action GameOver;
-
-
 
         public FourInARow(int i_Row, int i_Col, eGameStyle i_GameStyle, string i_FirstPlayerName, string i_SecondPlayerName)
         {
@@ -73,6 +69,19 @@ namespace FourInARowLogic
             }
         }
 
+        public Player LastWinner
+        {
+            get
+            {
+                return m_LastWinner;
+            }
+
+            set
+            {
+                m_LastWinner = value;
+            }
+        }
+
         public eStatesOfGame CurrentState
         {
             get
@@ -94,11 +103,12 @@ namespace FourInARowLogic
                 if(i_CurrentPlayer == m_Player1)
                 {
                     m_Player2.Score++;
-
+                    this.m_LastWinner = this.m_Player2;
                 }
                 else
                 { 
                      m_Player1.Score++;
+                     this.m_LastWinner = this.m_Player1;
                 }
             }
 
