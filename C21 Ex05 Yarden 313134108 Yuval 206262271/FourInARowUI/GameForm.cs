@@ -176,7 +176,7 @@ namespace FourInARowUI
         private void FourInARow_GameOver()
         {
             string roundWinner = getRoundWinnerAndUpdateScore();
-            string finalWinner = getFinalWinnerName(); // In case the game does not continue - gets the player with the highest score to show as winner
+            string finalWinner = getFinalWinnerName();
             
             Opacity = 0.8;
             if (endOfRoundMessageBox(roundWinner))

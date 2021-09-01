@@ -97,7 +97,6 @@ namespace FourInARowLogic
 
         public void RoundOver(Player i_CurrentPlayer)
         {
-
             if (m_CurrentState != eStatesOfGame.Draw)
             {
                 if(i_CurrentPlayer == m_Player1)
