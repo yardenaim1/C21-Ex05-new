@@ -92,11 +92,6 @@ namespace FourInARowLogic
             }
         }
 
-        public static bool IsValidSize(int i_Size)
-        {
-            return i_Size >= 4 && i_Size <= 8;
-        }
-
         private void initBoard()
         {
             for (int i = 0; i < r_RowSize; i++)
@@ -326,28 +321,6 @@ namespace FourInARowLogic
             }
 
             return countSameSign >= 4;
-        }
-
-        public void WinSequenceFound()
-        {
-            OnWinSequenceFound();
-        }
-
-        private void OnWinSequenceFound()
-        {
-            List<Cell> winSeq = new List<Cell>();
-            foreach(Cell cell in r_Board)
-            {
-                if (cell.IsPartOfSeq)
-                {
-                    winSeq.Add(cell);
-                }
-            }
-
-            if(WinSequenceFoundAction != null)
-            {
-                WinSequenceFoundAction.Invoke(winSeq);
-            }
         }
 
         public int ScoreOfBoard()

@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using System.Drawing;
 using FourInARowLogic;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace FourInARowUI
@@ -37,7 +36,6 @@ namespace FourInARowUI
             m_FourInARowGame = new FourInARow(r_Rows, r_Cols, gameStyle, r_Player1Name, r_Player2Name);
             m_FourInARowGame.PlayerSwitch += changeTextBoldAndColor;
             m_FourInARowGame.GameOver += FourInARow_GameOver;
-            m_FourInARowGame.board.WinSequenceFoundAction += Board_WinSequnceFoundAction;
         }
 
         private void InitializeComponent()
@@ -47,9 +45,8 @@ namespace FourInARowUI
             this.m_LabelScorePlayer1 = new System.Windows.Forms.Label();
             this.m_LabelScorePlayer2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
+            
             // m_LabelPlayer1
-            // 
             this.m_LabelPlayer1.AutoSize = true;
             this.m_LabelPlayer1.Top = m_ButtonsOfTheGame[r_Rows, 0].Bottom + 10;
             this.m_LabelPlayer1.Left = m_ButtonsOfTheGame[r_Rows, 0].Left;
@@ -58,38 +55,32 @@ namespace FourInARowUI
             this.m_LabelPlayer1.Text = r_Player1Name + ": ";
             this.m_LabelPlayer1.ForeColor = Color.Blue;
 
-            // 
             // m_LabelScorePlayer1
-            // 
-            // this.m_LabelScorePlayer1.AutoSize = true;
+            this.m_LabelScorePlayer1.AutoSize = true;
             this.m_LabelScorePlayer1.Left = m_LabelPlayer1.Left + m_LabelPlayer1.Width;
             this.m_LabelScorePlayer1.Top = m_LabelPlayer1.Top;
             this.m_LabelScorePlayer1.Name = "m_LabelScorePlayer1";
             this.m_LabelScorePlayer1.Size = new Size(21, 24);
             this.m_LabelScorePlayer1.TabIndex = 2;
             this.m_LabelScorePlayer1.Text = "0";
-            // 
-            // m_LabelPlayer2
-            // 
+            
+            // m_LabelPlayer2 
             this.m_LabelPlayer2.AutoSize = true;
             this.m_LabelPlayer2.Top = this.m_LabelPlayer1.Top;
             this.m_LabelPlayer2.Left = m_LabelScorePlayer1.Left + 40;
             this.m_LabelPlayer2.Name = "m_LabelPlayer2";
             this.m_LabelPlayer2.TabIndex = 1;
             this.m_LabelPlayer2.Text = r_Player2Name + ": ";
-            // 
-            // m_LabelScorePlayer2
-            // 
+            
+            // m_LabelScorePlayer2 
             this.m_LabelScorePlayer2.Left = m_LabelPlayer2.Left + m_LabelPlayer2.Width;
             this.m_LabelScorePlayer2.Top = m_LabelPlayer2.Top;
             this.m_LabelScorePlayer2.Name = "m_LabelScorePlayer2";
             this.m_LabelScorePlayer2.Size = new System.Drawing.Size(21, 24);
             this.m_LabelScorePlayer2.TabIndex = 3;
             this.m_LabelScorePlayer2.Text = "0";
-            // 
+            
             // GameForm
-            // 
-            // this.ClientSize = new System.Drawing.Size(278, 244);
             this.Controls.Add(this.m_LabelScorePlayer2);
             this.Controls.Add(this.m_LabelScorePlayer1);
             this.Controls.Add(this.m_LabelPlayer2);
@@ -122,17 +113,14 @@ namespace FourInARowUI
                         m_ButtonsOfTheGame[row, col].Size = new Size(60, 35);
                         m_ButtonsOfTheGame[row, col].Text = (col + 1).ToString();
                         m_ButtonsOfTheGame[row, col].Click += new EventHandler(ColButton_OnClick);
-                        m_ButtonsOfTheGame[row, col].BackColor = Color.Red;
-
                     }
                     else
                     {
                         m_ButtonsOfTheGame[row, col].Size = new Size(60, 45);
                         m_ButtonsOfTheGame[row, col].Enabled = false;
-                        m_ButtonsOfTheGame[row, col].BackColor = Color.Gray;
                     }
 
-                    m_ButtonsOfTheGame[row, col].Location = new Point((60 * col) + 10, (60 * row) + 30);
+                    m_ButtonsOfTheGame[row, col].Location = new Point((60 * col) + 10, 60 * row);
                     this.Controls.Add(m_ButtonsOfTheGame[row, col]);
                 }
             }
@@ -140,7 +128,7 @@ namespace FourInARowUI
 
         private void updateGameButtons(int i_Row, int i_Col, char i_PlayerSign)
         {
-            Button buttonToUpdate = m_ButtonsOfTheGame[i_Row, i_Col - 1];
+            GameButton buttonToUpdate = m_ButtonsOfTheGame[i_Row, i_Col - 1];
 
             buttonToUpdate.Text = i_PlayerSign.ToString();
             for (int col = 0; col < r_Cols; col++)
@@ -183,7 +171,6 @@ namespace FourInARowUI
                 }
             }
         }
-    
 
         private void FourInARow_GameOver()
         {
@@ -208,23 +195,14 @@ namespace FourInARowUI
             }
         }
 
-        private void Board_WinSequnceFoundAction(List<Board.Cell> i_WinSeq)
-        {
-            foreach(Board.Cell boardCell in i_WinSeq)
-            {
-                m_ButtonsOfTheGame[boardCell.Row + 1, boardCell.Col].BackColor = Color.Green;
-            }
-        }
-
         private void clearGameBoardButtons()
         {
             for(int row = 1; row <= r_Rows; row++)
             {
-                for(int col = 0;col < r_Cols; col++)
+                for(int col = 0; col < r_Cols; col++)
                 {
                     m_ButtonsOfTheGame[0, col].Enabled = true;
                     m_ButtonsOfTheGame[row, col].Text = string.Empty;
-                    m_ButtonsOfTheGame[row, col].BackColor = Color.Gray;
                 }
             }            
         }

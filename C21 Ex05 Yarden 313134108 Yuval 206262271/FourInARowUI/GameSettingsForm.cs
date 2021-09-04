@@ -12,7 +12,7 @@ namespace FourInARowUI
     public class GameSettingsForm : Form
     {
         private const string k_AIName = "[Computer]";
-        private const int k_MaxRowsAndCols = 8;
+        private const int k_MaxRowsAndCols = 10;
         private const int k_MinRowsAndCols = 4;
 
         private Label labelPlayers;
@@ -107,21 +107,26 @@ namespace FourInARowUI
             // 
             // numericUpDownRows
             // 
+
+            this.numericUpDownRows.AutoSize = true;
+
             this.numericUpDownRows.Location = new System.Drawing.Point(89, 172);
             this.numericUpDownRows.Maximum = k_MaxRowsAndCols;
             this.numericUpDownRows.Minimum = k_MinRowsAndCols;
             this.numericUpDownRows.Name = "numericUpDownRows";
-            this.numericUpDownRows.Size = new System.Drawing.Size(35, 26);
+            this.numericUpDownRows.Size = new System.Drawing.Size(35, 100);
             this.numericUpDownRows.TabIndex = 3;
             this.numericUpDownRows.Value = k_MinRowsAndCols;
             // 
             // numericUpDownCols
             // 
+            this.numericUpDownCols.AutoSize = true;
+            
             this.numericUpDownCols.Location = new System.Drawing.Point(210, 172);
             this.numericUpDownCols.Maximum = k_MaxRowsAndCols;
             this.numericUpDownCols.Minimum = k_MinRowsAndCols;
             this.numericUpDownCols.Name = "numericUpDownCols";
-            this.numericUpDownCols.Size = new System.Drawing.Size(35, 26);
+            this.numericUpDownCols.Size = new System.Drawing.Size(35, 100);
             this.numericUpDownCols.TabIndex = 4;
             this.numericUpDownCols.Value = k_MinRowsAndCols;
             // 
