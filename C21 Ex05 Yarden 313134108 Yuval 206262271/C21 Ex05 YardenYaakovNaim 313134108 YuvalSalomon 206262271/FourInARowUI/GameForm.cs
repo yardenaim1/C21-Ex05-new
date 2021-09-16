@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Collections.Generic;
 using FourInARowLogic;
-using System.Threading;
 
 namespace FourInARowUI
 {
     public class GameForm : Form
     {
+        private const int k_ButtonSize = 60;
         private readonly string r_Player1Name, r_Player2Name;
         private readonly bool r_IsPlayer2AI;
         private readonly int r_Rows, r_Cols;
@@ -25,17 +26,18 @@ namespace FourInARowUI
             this.r_Player1Name = i_Player1Name;
             this.r_Player2Name = i_Player2Name;
             this.r_IsPlayer2AI = i_IsAI;
-            this.InitializeButtons();
+            this.initializeButtons();
             this.InitializeComponent();
         }
 
-        private void GameForm_Load(object sender, EventArgs e)
+        private void gameForm_Load(object sender, EventArgs e)
         {
             FourInARow.eGameStyle gameStyle = r_IsPlayer2AI ? FourInARow.eGameStyle.PlayerVsComputer : FourInARow.eGameStyle.PlayerVsPlayer;
 
             m_FourInARowGame = new FourInARow(r_Rows, r_Cols, gameStyle, r_Player1Name, r_Player2Name);
             m_FourInARowGame.PlayerSwitch += changeTextBoldAndColor;
-            m_FourInARowGame.GameOver += FourInARow_GameOver;
+            m_FourInARowGame.GameOver += fourInARow_GameOver;
+            m_FourInARowGame.GameBoard.WinSequenceFoundAction += Board_WinSequnceFoundAction;
         }
 
         private void InitializeComponent()
@@ -85,7 +87,7 @@ namespace FourInARowUI
             this.Controls.Add(this.m_LabelScorePlayer1);
             this.Controls.Add(this.m_LabelPlayer2);
             this.Controls.Add(this.m_LabelPlayer1);
-            this.ClientSize = new Size(r_Cols * 60 + 20, (r_Rows + 1) * 60 + 50);
+            this.ClientSize = new Size(r_Cols * k_ButtonSize + 20, (r_Rows + 1) * k_ButtonSize + 50);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.Name = "GameForm";
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -94,12 +96,12 @@ namespace FourInARowUI
             this.MinimizeBox = false;
             this.MaximizeBox = false;
             this.Text = "4 In A Raw !!";
-            this.Load += GameForm_Load;
+            this.Load += gameForm_Load;
             this.ResumeLayout(false);
             this.PerformLayout();
         }
 
-        private void InitializeButtons()
+        private void initializeButtons()
         {
             m_ButtonsOfTheGame = new GameButton[r_Rows + 1, r_Cols];
             for (int row = 0; row <= r_Rows; row++)
@@ -110,17 +112,21 @@ namespace FourInARowUI
                     if (row == 0)
                     {
                         m_ButtonsOfTheGame[row, col].Enabled = true;
-                        m_ButtonsOfTheGame[row, col].Size = new Size(60, 35);
+                        m_ButtonsOfTheGame[row, col].Size = new Size(k_ButtonSize, 35);
                         m_ButtonsOfTheGame[row, col].Text = (col + 1).ToString();
-                        m_ButtonsOfTheGame[row, col].Click += new EventHandler(ColButton_OnClick);
+                        m_ButtonsOfTheGame[row, col].Click += new EventHandler(colButton_OnClick);
+                        m_ButtonsOfTheGame[row, col].BackColor = Color.Red;
+
                     }
                     else
                     {
-                        m_ButtonsOfTheGame[row, col].Size = new Size(60, 45);
+                        m_ButtonsOfTheGame[row, col].Size = new Size(k_ButtonSize, 45);
                         m_ButtonsOfTheGame[row, col].Enabled = false;
+                        m_ButtonsOfTheGame[row, col].BackColor = Color.Gray;
+
                     }
 
-                    m_ButtonsOfTheGame[row, col].Location = new Point((60 * col) + 10, 60 * row);
+                    m_ButtonsOfTheGame[row, col].Location = new Point((k_ButtonSize * col) + 10, k_ButtonSize * row);
                     this.Controls.Add(m_ButtonsOfTheGame[row, col]);
                 }
             }
@@ -129,7 +135,7 @@ namespace FourInARowUI
         private void updateGameButtons(int i_Row, int i_Col, char i_PlayerSign)
         {
             GameButton buttonToUpdate = m_ButtonsOfTheGame[i_Row, i_Col - 1];
-
+         
             buttonToUpdate.Text = i_PlayerSign.ToString();
             for (int col = 0; col < r_Cols; col++)
             {
@@ -154,7 +160,7 @@ namespace FourInARowUI
             }
         }
       
-        private void ColButton_OnClick(object sender, EventArgs e)
+        private void colButton_OnClick(object sender, EventArgs e)
         {
             makePlayerMove(sender);
             FourInARow.eStatesOfGame state = m_FourInARowGame.CurrentState;
@@ -172,7 +178,15 @@ namespace FourInARowUI
             }
         }
 
-        private void FourInARow_GameOver()
+        private void Board_WinSequnceFoundAction(List<Board.Cell> i_WinSeq)
+        {
+            foreach (Board.Cell boardCell in i_WinSeq)
+            {
+                m_ButtonsOfTheGame[boardCell.Row + 1, boardCell.Col].BackColor = Color.Green;
+            }
+        }
+
+        private void fourInARow_GameOver()
         {
             string roundWinner = getRoundWinnerAndUpdateScore();
             string finalWinner = getFinalWinnerName();
@@ -197,14 +211,18 @@ namespace FourInARowUI
 
         private void clearGameBoardButtons()
         {
-            for(int row = 1; row <= r_Rows; row++)
+            foreach(GameButton gameButton in m_ButtonsOfTheGame)
             {
-                for(int col = 0; col < r_Cols; col++)
+                if(gameButton.Row == 0)
                 {
-                    m_ButtonsOfTheGame[0, col].Enabled = true;
-                    m_ButtonsOfTheGame[row, col].Text = string.Empty;
+                    gameButton.Enabled = true;
                 }
-            }            
+                else
+                {
+                    gameButton.Text = string.Empty;
+                    gameButton.BackColor = Color.Gray;
+                }
+            }        
         }
 
         private string getRoundWinnerAndUpdateScore()

@@ -21,12 +21,11 @@ namespace FourInARowLogic
                             new Player(Player.ePlayerType.Player2, 'O', i_SecondPlayerName);
             this.m_CurrentPlayer = this.m_Player1;
         }
-
-        public Board board
+        public Board GameBoard
         {
             get
             {
-                return this.r_Board;
+                return r_Board;
             }
         }
 
@@ -36,11 +35,6 @@ namespace FourInARowLogic
             {
                 return m_Player1;
             }
-
-            set
-            {
-                m_Player1 = value;
-            }
         }
 
         public Player Player2
@@ -48,11 +42,6 @@ namespace FourInARowLogic
             get
             {
                 return m_Player2;
-            }
-
-            set
-            {
-                m_Player2 = value;
             }
         }
 
@@ -99,7 +88,7 @@ namespace FourInARowLogic
         {
             if (m_CurrentState != eStatesOfGame.Draw)
             {
-                if(i_CurrentPlayer == m_Player1)
+                if (i_CurrentPlayer == m_Player1)
                 {
                     m_Player2.Score++;
                     this.m_LastWinner = this.m_Player2;
@@ -236,6 +225,7 @@ namespace FourInARowLogic
 
             if (r_Board.IsWinnerMove(i_LastRowInserted, i_LastColInserted))
             {
+                r_Board.WinSequenceFound();
                 resultState = eStatesOfGame.Lose;
             }
             else if (r_Board.IsDraw())

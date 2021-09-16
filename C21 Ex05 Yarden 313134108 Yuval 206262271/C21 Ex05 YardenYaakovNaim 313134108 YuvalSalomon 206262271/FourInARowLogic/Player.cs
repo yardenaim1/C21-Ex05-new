@@ -7,7 +7,6 @@
         private readonly char r_Sign;
         private int m_Score = 0;
 
-
         public Player(ePlayerType i_Type, char i_Sign, string i_Name)
         {
             r_PlayerType = i_Type;

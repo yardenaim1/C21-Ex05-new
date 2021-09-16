@@ -49,27 +49,24 @@ namespace FourInARowUI
             ((System.ComponentModel.ISupportInitialize)(numericUpDownRows)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(numericUpDownCols)).BeginInit();
             this.SuspendLayout();
-            // 
+            
             // labelPlayers
-            // 
             this.labelPlayers.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.labelPlayers.Location = new System.Drawing.Point(21, 19);
             this.labelPlayers.Name = "labelPlayers";
             this.labelPlayers.Size = new System.Drawing.Size(77, 20);
             this.labelPlayers.TabIndex = 0;
             this.labelPlayers.Text = "Players:";
-            // 
+             
             // labelPlayer1
-            // 
             this.labelPlayer1.AutoSize = true;
             this.labelPlayer1.Location = new System.Drawing.Point(45, 52);
             this.labelPlayer1.Name = "labelPlayer1";
             this.labelPlayer1.Size = new System.Drawing.Size(84, 20);
             this.labelPlayer1.TabIndex = 1;
             this.labelPlayer1.Text = "Player 1:";
-            // 
+
             // checkBoxPlayer2
-            // 
             this.checkBoxPlayer2.AutoSize = true;
             this.checkBoxPlayer2.Location = new System.Drawing.Point(48, 78);
             this.checkBoxPlayer2.Name = "checkBoxPlayer2";
@@ -78,25 +75,22 @@ namespace FourInARowUI
             this.checkBoxPlayer2.Text = "Player 2:";
             this.checkBoxPlayer2.UseVisualStyleBackColor = true;
             this.checkBoxPlayer2.CheckedChanged += new System.EventHandler(this.checkBoxSecondPlayer_Click);
-            // 
+            
             // textBoxPlayer1
-            // 
             this.textBoxPlayer1.Location = new System.Drawing.Point(132, 49);
             this.textBoxPlayer1.Name = "textBoxPlayer1";
             this.textBoxPlayer1.Size = new System.Drawing.Size(100, 26);
             this.textBoxPlayer1.TabIndex = 0;
-            // 
+           
             // textBoxPlayer2
-            // 
             this.textBoxPlayer2.Enabled = false;
             this.textBoxPlayer2.Location = new System.Drawing.Point(132, 76);
             this.textBoxPlayer2.Name = "textBoxPlayer2";
             this.textBoxPlayer2.Size = new Size(100, 26);
             this.textBoxPlayer2.TabIndex = 2;
             this.textBoxPlayer2.Text = k_AIName;
-            // 
+           
             // labelBoardSize
-            // 
             this.labelBoardSize.AutoSize = true;
             this.labelBoardSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.labelBoardSize.Location = new System.Drawing.Point(21, 139);
@@ -104,12 +98,9 @@ namespace FourInARowUI
             this.labelBoardSize.Size = new System.Drawing.Size(125, 25);
             this.labelBoardSize.TabIndex = 6;
             this.labelBoardSize.Text = "Board Size:";
-            // 
+           
             // numericUpDownRows
-            // 
-
             this.numericUpDownRows.AutoSize = true;
-
             this.numericUpDownRows.Location = new System.Drawing.Point(89, 172);
             this.numericUpDownRows.Maximum = k_MaxRowsAndCols;
             this.numericUpDownRows.Minimum = k_MinRowsAndCols;
@@ -117,11 +108,9 @@ namespace FourInARowUI
             this.numericUpDownRows.Size = new System.Drawing.Size(35, 100);
             this.numericUpDownRows.TabIndex = 3;
             this.numericUpDownRows.Value = k_MinRowsAndCols;
-            // 
+          
             // numericUpDownCols
-            // 
             this.numericUpDownCols.AutoSize = true;
-            
             this.numericUpDownCols.Location = new System.Drawing.Point(210, 172);
             this.numericUpDownCols.Maximum = k_MaxRowsAndCols;
             this.numericUpDownCols.Minimum = k_MinRowsAndCols;
@@ -129,18 +118,16 @@ namespace FourInARowUI
             this.numericUpDownCols.Size = new System.Drawing.Size(35, 100);
             this.numericUpDownCols.TabIndex = 4;
             this.numericUpDownCols.Value = k_MinRowsAndCols;
-            // 
+             
             // labelRows
-            // 
             this.labelRows.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.labelRows.Location = new System.Drawing.Point(31, 172);
             this.labelRows.Name = "labelRows";
             this.labelRows.Size = new System.Drawing.Size(52, 25);
             this.labelRows.TabIndex = 9;
             this.labelRows.Text = "Rows";
-            // 
+           
             // labelCols
-            // 
             this.labelCols.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.labelCols.Location = new System.Drawing.Point(162, 172);
             this.labelCols.Name = "labelCols";
@@ -158,9 +145,8 @@ namespace FourInARowUI
             this.buttonStartGame.Text = "Start!";
             this.buttonStartGame.UseVisualStyleBackColor = true;
             this.buttonStartGame.Click += new System.EventHandler(this.buttonStart_Click);
-            // 
+            
             // GameSettingsForm
-            // 
             this.AcceptButton = this.buttonStartGame;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new Size(284, 261);
@@ -187,7 +173,6 @@ namespace FourInARowUI
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCols)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         private void checkBoxSecondPlayer_Click(object sender, System.EventArgs e)
@@ -201,10 +186,6 @@ namespace FourInARowUI
             if (this.textBoxPlayer1.Text == string.Empty || this.textBoxPlayer2.Text == string.Empty)
             {
                 MessageBox.Show("Please enter proper names (no blanks)", "Error");
-            }
-            else if (this.textBoxPlayer1.Text == this.textBoxPlayer2.Text)
-            {
-                MessageBox.Show("Players names should be different, please change one of the names and try again.", "Error");
             }
             else
             {

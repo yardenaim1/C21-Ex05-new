@@ -8,7 +8,7 @@ namespace FourInARowLogic
         private readonly int r_RowSize, r_ColSize;
         private readonly Cell[,] r_Board = null;
 
-        public event Action<List<Cell>> WinSequenceFoundAction;
+        public event Action<List<Board.Cell>> WinSequenceFoundAction;
 
         public class Cell
         {
@@ -71,7 +71,6 @@ namespace FourInARowLogic
         {
             r_ColSize = i_Cols;
             r_RowSize = i_Rows;
-
             r_Board = new Cell[i_Rows, i_Cols];
             initBoard();
         }
@@ -110,11 +109,6 @@ namespace FourInARowLogic
                 cell.Sign = ' ';
                 cell.IsPartOfSeq = false;
             }
-        }
-
-        public char GetValueInCell(int i_Row, int i_Col)
-        {
-            return r_Board[i_Row, i_Col].Sign;
         }
 
         public void AddMove(int i_Col, char i_Sign, out int o_Row)
@@ -180,6 +174,7 @@ namespace FourInARowLogic
                 {
                     break;
                 }
+
                 r_Board[i_Row - 1, i - 1].IsPartOfSeq = true;
                 countSameSign++;
             }
@@ -338,6 +333,7 @@ namespace FourInARowLogic
         private int checkRowsSequences()
         {
             int score = 0;
+
             for (int i = 0; i < r_RowSize; i++)
             {
                 for (int j = 0; j < r_ColSize - 3; j++)
@@ -357,6 +353,7 @@ namespace FourInARowLogic
         private int checkColsSequences()
         {
             int score = 0;
+
             for (int i = 0; i < r_ColSize; i++)
             {
                 for (int j = 0; j < r_RowSize - 3; j++)
@@ -376,6 +373,7 @@ namespace FourInARowLogic
         private int checkUpToDownDiagonalSequences()
         {
             int score = 0;
+
             for (int i = 0; i < r_RowSize - 3; i++)
             {
                 for (int j = 0; j < r_ColSize - 3; j++)
@@ -395,6 +393,7 @@ namespace FourInARowLogic
         private int checkDownToUpDiagonalSequences()
         {
             int score = 0;
+
             for (int i = r_ColSize - 1; i >= 3; i--)
             {
                 for (int j = 0; j < r_RowSize - 3; j++)
@@ -457,6 +456,28 @@ namespace FourInARowLogic
         public bool IsValidCol(int i_Col)
         {
             return i_Col >= 1 && i_Col <= this.r_ColSize && r_Board[0, i_Col - 1].Sign == ' ';
+        }
+
+        public void WinSequenceFound()
+        {
+            OnWinSequenceFound();
+        }
+
+        private void OnWinSequenceFound()
+        {
+            List<Cell> winSeq = new List<Cell>();
+            foreach (Cell cell in r_Board)
+            {
+                if (cell.IsPartOfSeq)
+                {
+                    winSeq.Add(cell);
+                }
+            }
+
+            if (WinSequenceFoundAction != null)
+            {
+                WinSequenceFoundAction.Invoke(winSeq);
+            }
         }
     }
 }
