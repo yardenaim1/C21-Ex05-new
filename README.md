@@ -1,1 +1,2 @@
-C21 Ex05 new
+Four in A Row Application for Windows Desktop.
+Written in C# using .NET Framework
